@@ -1,171 +1,371 @@
-Configuring Allowed VLANs and VTP Pruning Using Cisco Packet Tracer
+# 🔐 Configuring Allowed VLANs & VTP Pruning
 
-Project Overview
+### 🖥️ Cisco Packet Tracer | Switching Technologies | Layer 2 Networking
 
-This project demonstrates basic Cisco switching and VLAN security configurations using Cisco Packet Tracer.
+---
 
-The main objective was to configure VLANs, assign end devices to appropriate VLANs, establish trunk links between switches, and control which VLANs are allowed to traverse the trunk interfaces.
+## 📌 Project Overview
 
-The project also covers VTP Pruning configuration to reduce unnecessary VLAN traffic across trunk links.
+This project demonstrates the configuration and verification of **VLANs, Access Ports, Trunk Links, Allowed VLANs, and VTP Pruning** using **Cisco Packet Tracer**.
 
-Project Objectives
+The primary objective of this project is to understand how VLAN traffic can be controlled across trunk links by allowing only the required VLANs and restricting unnecessary or unauthorized VLAN traffic.
 
-* Create and name VLANs on multiple switches
-* Assign switch ports to the appropriate VLANs
-* Configure IP addresses on end devices
-* Configure trunk links between switches
-* Verify VLANs allowed on trunk interfaces
-* Restrict unauthorized/unnecessary VLANs from crossing trunk links
-* Configure VTP Pruning
-* Test connectivity before and after VLAN restrictions
-* Verify the final configuration using Cisco IOS show commands
+It also demonstrates how **VTP Pruning** can help reduce unnecessary Layer 2 traffic across trunk links.
 
-Network Topology
+---
 
-The topology consists of two Cisco switches connected through trunk links.
+## 🎯 Project Objectives
 
-End devices are placed into different VLANs:
+The main objectives of this project were to:
 
-VLAN	Name	Purpose
-VLAN 10	IT	IT network
-VLAN 20	HR	HR network
-VLAN 30	Finance	Finance network
-VLAN 40	Hacker-1	Untrusted/test VLAN
-VLAN 50	Hacker-2	Untrusted/test VLAN
+* 🔹 Create and name multiple VLANs
+* 🔹 Configure IP addresses on end devices
+* 🔹 Assign switch ports to appropriate VLANs
+* 🔹 Configure trunk links between switches
+* 🔹 Verify VLANs allowed on trunk interfaces
+* 🔹 Restrict unnecessary VLANs from trunk links
+* 🔹 Configure VTP Pruning
+* 🔹 Test network connectivity using `ping`
+* 🔹 Verify configurations using Cisco IOS commands
+* 🔹 Understand basic Layer 2 traffic control and security
 
-Configuration Steps
+---
 
-1. Create the Network Topology
+## 🗺️ Network Topology
 
-Created the required topology in Cisco Packet Tracer with:
+The topology consists of:
 
-* Two Cisco switches
-* Multiple end devices
-* Trunk connections between the switches
-* Separate VLANs for different network segments
+* 🖧 2 Cisco switches
+* 💻 Multiple end devices
+* 🔗 Trunk links between the switches
+* 🏷️ Multiple VLANs for network segmentation
 
-2. Configure IP Addresses
+### VLAN Structure
 
-Configured IP addresses for the end devices according to their respective VLAN networks.
+| VLAN ID | VLAN Name | Purpose             |
+| ------: | --------- | ------------------- |
+|      10 | IT        | IT Network          |
+|      20 | HR        | HR Network          |
+|      30 | Finance   | Finance Network     |
+|      40 | Hacker-1  | Untrusted/Test VLAN |
+|      50 | Hacker-2  | Untrusted/Test VLAN |
 
-Example:
+---
 
-* VLAN 10 → 10.10.x.x
-* VLAN 20 → 20.20.x.x
-* VLAN 30 → 30.30.x.x
+## ⚙️ Configuration Workflow
 
-3. Create and Name VLANs
+### 1️⃣ Build the Network Topology
 
-Created and named the required VLANs on the switches:
+Created the required network topology in Cisco Packet Tracer with two switches, end devices, and inter-switch connections.
 
-VLAN 10  → IT
-VLAN 20  → HR
-VLAN 30  → Finance
-VLAN 40  → Hacker-1
-VLAN 50  → Hacker-2
+---
 
-4. Assign Access Ports to VLANs
+### 2️⃣ Configure IP Addresses
 
-Configured end-device switch ports as access ports and assigned them to their respective VLANs.
+Assigned IP addresses to the end devices according to their respective VLAN networks.
 
 Example:
 
+```text
+VLAN 10 → 10.10.x.x
+VLAN 20 → 20.20.x.x
+VLAN 30 → 30.30.x.x
+```
+
+---
+
+### 3️⃣ Create and Name VLANs
+
+Created and named the required VLANs on the switches.
+
+```text
+VLAN 10 → IT
+VLAN 20 → HR
+VLAN 30 → Finance
+VLAN 40 → Hacker-1
+VLAN 50 → Hacker-2
+```
+
+Example configuration:
+
+```bash
+enable
+configure terminal
+
+vlan 10
+name IT
+
+vlan 20
+name HR
+
+vlan 30
+name Finance
+
+vlan 40
+name Hacker-1
+
+vlan 50
+name Hacker-2
+
+exit
+```
+
+---
+
+### 4️⃣ Assign Access Ports
+
+Configured end-device interfaces as access ports and assigned them to the appropriate VLANs.
+
+Example:
+
+```bash
 interface fa0/3
 switchport mode access
 switchport access vlan 10
+```
 
-Similar configurations were applied for VLANs 20 and 30.
+Similar configurations were applied to the required ports for VLAN 20 and VLAN 30.
 
-5. Configure Trunk Links
+---
+
+### 5️⃣ Configure Trunk Links
 
 Configured the inter-switch interfaces as trunk ports.
 
 Example:
 
+```bash
 interface range fa0/23-24
 switchport mode trunk
+```
 
-These trunk links allow VLAN traffic to travel between the switches.
+🔗 The trunk links allow multiple VLANs to travel between the switches.
 
-6. Verify Allowed VLANs on Trunk Interfaces
+---
 
-Verified the VLANs allowed across the trunk using:
+### 6️⃣ Verify Allowed VLANs
 
+Verified the VLANs currently allowed across the trunk interfaces.
+
+```bash
 show interfaces trunk
+```
 
-Initially, the trunk allowed all VLANs by default.
+Initially, the trunk interfaces allowed multiple VLANs, including the unnecessary/test VLANs.
 
-This means even unnecessary or untrusted VLANs could potentially traverse the trunk.
+⚠️ This demonstrates why controlling the VLANs allowed on trunk links is important.
 
-7. Restrict VLANs on the Trunk
+---
 
-Instead of allowing every VLAN, configured the trunk to carry only the required VLANs.
+### 7️⃣ Restrict Allowed VLANs
 
-Example:
+Configured the trunk interfaces to allow only the required VLANs.
 
+```bash
 interface range fa0/23-24
 switchport trunk allowed vlan 10,20,30
+```
 
-This configuration allows only:
+✅ Allowed VLANs:
 
+```text
 VLAN 10
 VLAN 20
 VLAN 30
+```
 
-VLANs 40 and 50 are prevented from traversing the trunk.
+🚫 Restricted VLANs:
 
-8. Test and Verify Connectivity
+```text
+VLAN 40
+VLAN 50
+```
 
-Connectivity was tested between devices before and after applying the VLAN restrictions.
+This prevents the restricted VLANs from traversing the configured trunk links.
 
-For example:
+---
 
-* Communication between devices in allowed VLANs was successful.
-* Traffic from a restricted VLAN was prevented from crossing the trunk.
+### 8️⃣ Test & Verify Connectivity
 
-The configuration was verified using:
+Connectivity was tested before and after restricting the allowed VLANs.
 
-show interfaces trunk
+Example:
 
-and connectivity tests using:
-
+```bash
 ping <destination-ip>
+```
 
-9. VTP Pruning Configuration
+### ✅ Before VLAN Restriction
 
-VTP Pruning was configured as an additional switching optimization to prevent unnecessary broadcast, multicast, and unknown-unicast traffic from being forwarded through trunk links where it is not required.
+Devices in the relevant VLANs were able to communicate across the trunk.
 
-This helps reduce unnecessary traffic and improves network efficiency in larger VLAN environments.
+### 🚫 After VLAN Restriction
 
-Key Commands Used
+Traffic belonging to restricted VLANs was prevented from crossing the configured trunk link.
 
-show vlan brief
+The result was verified using:
+
+```bash
 show interfaces trunk
+```
+
+---
+
+### 9️⃣ VTP Pruning
+
+Configured **VTP Pruning** as an additional Layer 2 traffic optimization technique.
+
+VTP Pruning helps prevent unnecessary VLAN traffic from being forwarded across trunk links when that traffic is not required on the neighboring switch.
+
+### 💡 Benefit
+
+VTP Pruning can help:
+
+* 📉 Reduce unnecessary Layer 2 traffic
+* 🚀 Improve network efficiency
+* 🔗 Optimize trunk link utilization
+* 🛡️ Improve control over VLAN traffic propagation
+
+---
+
+## 🔑 Important Cisco IOS Commands
+
+### 🔍 View VLANs
+
+```bash
+show vlan brief
+```
+
+### 🔗 View Trunk Configuration
+
+```bash
+show interfaces trunk
+```
+
+### 🏷️ Create VLAN
+
+```bash
+vlan 10
+name IT
+```
+
+### 🔌 Configure Access Port
+
+```bash
 interface fa0/3
 switchport mode access
 switchport access vlan 10
+```
+
+### 🔗 Configure Trunk
+
+```bash
 interface range fa0/23-24
 switchport mode trunk
+```
+
+### 🚦 Allow Specific VLANs on Trunk
+
+```bash
 switchport trunk allowed vlan 10,20,30
+```
 
-Key Learning Outcomes
+### 🧪 Test Connectivity
 
-Through this project, I practiced:
+```bash
+ping <destination-ip>
+```
 
-* VLAN creation and management
-* VLAN naming
-* Access port configuration
-* Trunk port configuration
-* Allowed VLAN configuration
-* VLAN traffic restriction
-* Basic Layer 2 security concepts
-* VTP Pruning
-* Network connectivity testing
-* Cisco IOS verification commands
-* Troubleshooting VLAN and trunk connectivity
+---
 
-Project Result
+## 🧪 Verification
 
-The final configuration successfully restricted trunk traffic to the required VLANs while preventing unnecessary/untrusted VLANs from traversing the trunk.
+The following commands were used to verify the configuration:
 
-This demonstrates how VLAN segmentation, trunk VLAN filtering, and VTP Pruning can be used to improve Layer 2 network control, security, and efficiency.
+```bash
+show vlan brief
+show interfaces trunk
+```
+
+The verification confirmed that:
+
+* ✅ Required VLANs were created
+* ✅ Access ports were assigned correctly
+* ✅ Trunk links were operational
+* ✅ Only the required VLANs were permitted on the configured trunk
+* ✅ Restricted VLAN traffic was prevented from crossing the trunk
+* ✅ Connectivity behavior changed according to the VLAN restrictions
+
+---
+
+## 🧠 Key Concepts Learned
+
+Through this hands-on project, I gained practical experience with:
+
+* 🏷️ VLAN Configuration
+* 🔌 Access Port Configuration
+* 🔗 Trunk Port Configuration
+* 🚦 Allowed VLAN Filtering
+* 🛡️ Basic Layer 2 Security
+* 🌐 VLAN Segmentation
+* ✂️ Restricting Unnecessary VLAN Traffic
+* 🌳 VTP Pruning
+* 🧪 Network Connectivity Testing
+* 🔍 Cisco IOS Verification Commands
+* 🛠️ Basic Layer 2 Troubleshooting
+
+---
+
+## 💡 Key Takeaway
+
+> **Do not allow unnecessary VLANs across trunk links.**
+
+By configuring only the required VLANs on a trunk interface, network administrators can gain better control over VLAN traffic and reduce unnecessary traffic propagation.
+
+Combining **VLAN segmentation, allowed VLAN filtering, and VTP Pruning** provides a practical approach to improving Layer 2 network efficiency and control.
+
+---
+
+## 🛠️ Technologies & Tools
+
+| Category              | Technology           |
+| --------------------- | -------------------- |
+| 🖥️ Network Simulator | Cisco Packet Tracer  |
+| 🌐 Networking         | Cisco Switching      |
+| 🏷️ VLAN              | IEEE 802.1Q VLAN     |
+| 🔗 Trunking           | Switch Trunk Links   |
+| 🌳 VLAN Management    | VTP Pruning          |
+| 💻 CLI                | Cisco IOS            |
+| 🧪 Testing            | Ping / Show Commands |
+
+---
+
+
+## 👨‍💻 Project Type
+
+**Hands-on Networking Lab**
+
+📚 **Learning Area:** Switching Technologies
+🎯 **Focus:** VLAN & Trunk Configuration
+🖥️ **Platform:** Cisco Packet Tracer
+🔰 **Level:** Beginner / Entry-Level Network Engineering
+
+---
+
+## 🚀 Future Improvements
+
+The lab can be extended by adding:
+
+* 🔹 VTP Server / Client configuration
+* 🔹 Inter-VLAN Routing
+* 🔹 Router-on-a-Stick
+* 🔹 Layer 3 Switch Configuration
+* 🔹 EtherChannel
+* 🔹 STP Configuration
+* 🔹 Port Security
+* 🔹 DHCP Configuration
+* 🔹 Extended VLAN Security Testing
+
+---
+
+⭐ **This project is part of my hands-on networking practice focused on developing practical Cisco switching and Layer 2 networking skills.**
